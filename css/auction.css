@@ -1,0 +1,430 @@
+/* =========================================
+   AUCTION VIEW SPECIFIC STYLES
+   ========================================= */
+
+#view-auction {
+    max-width: 100%;
+    padding: 0;
+}
+
+.auction-layout {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    min-height: calc(100vh - 60px);
+}
+
+.auction-sidebar {
+    padding: var(--space-lg);
+    background: var(--bg-secondary);
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+}
+
+.auction-stage {
+    padding: var(--space-xl);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+    overflow-y: auto;
+}
+
+/* =========================================
+   STATUS BANNER
+   ========================================= */
+.status-banner {
+    text-align: center;
+    padding: 8px 20px;
+    background: var(--bg-card);
+    border-radius: var(--radius-full);
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--accent-info);
+    border: 1px solid rgba(6, 182, 212, 0.2);
+    margin-bottom: var(--space-md);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    display: inline-block;
+    align-self: center;
+}
+
+.status-banner.live {
+    color: var(--accent-danger);
+    border-color: rgba(239, 68, 68, 0.3);
+    animation: livePulse 1.5s ease-in-out infinite;
+}
+
+@keyframes livePulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.2); }
+    50% { box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); }
+}
+
+.status-banner.paused {
+    color: var(--accent-warning);
+    border-color: rgba(245, 158, 11, 0.3);
+}
+
+/* =========================================
+   PLAYER CARD
+   ========================================= */
+.player-card-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.player-card {
+    width: 100%;
+    max-width: 600px;
+    padding: var(--space-xl);
+    position: relative;
+    overflow: hidden;
+    transition: all var(--transition-base);
+}
+
+.player-card.new-player {
+    animation: cardSlideIn 0.5s var(--transition-spring);
+}
+
+@keyframes cardSlideIn {
+    from { transform: translateX(60px) scale(0.95); opacity: 0; }
+    to   { transform: translateX(0) scale(1); opacity: 1; }
+}
+
+.player-card-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: var(--space-md);
+}
+
+.player-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: var(--gradient-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    box-shadow: 0 0 30px var(--accent-primary-glow);
+    position: relative;
+    overflow: hidden;
+}
+
+.player-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.player-name {
+    font-size: 1.8rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.player-meta {
+    display: flex;
+    gap: var(--space-md);
+    align-items: center;
+}
+
+.player-country {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.player-role-badge {
+    padding: 4px 14px;
+    border-radius: var(--radius-full);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.player-role-badge.batsman  { background: rgba(59, 130, 246, 0.15); color: var(--role-bat); border: 1px solid rgba(59, 130, 246, 0.3); }
+.player-role-badge.bowler   { background: rgba(239, 68, 68, 0.15); color: var(--role-bowl); border: 1px solid rgba(239, 68, 68, 0.3); }
+.player-role-badge.allrounder { background: rgba(139, 92, 246, 0.15); color: var(--role-ar); border: 1px solid rgba(139, 92, 246, 0.3); }
+.player-role-badge.wicketkeeper { background: rgba(16, 185, 129, 0.15); color: var(--role-wk); border: 1px solid rgba(16, 185, 129, 0.3); }
+
+.player-rating {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.player-rating .stars {
+    color: var(--accent-gold);
+    font-size: 1rem;
+    letter-spacing: 2px;
+}
+
+.player-rating .rating-value {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+/* =========================================
+   BID SECTION
+   ========================================= */
+.bid-section {
+    width: 100%;
+    margin-top: var(--space-md);
+}
+
+.price-row {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-xl);
+    margin-bottom: var(--space-md);
+}
+
+.price-item {
+    text-align: center;
+}
+
+.price-label {
+    display: block;
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+}
+
+.price-value {
+    font-size: 1.1rem;
+    font-weight: 700;
+    font-family: var(--font-mono);
+    color: var(--text-primary);
+}
+
+.price-value.big {
+    font-size: 1.8rem;
+    color: var(--accent-success);
+    text-shadow: 0 0 20px var(--accent-success-glow);
+}
+
+.price-item.highlight {
+    padding: 12px 24px;
+    background: rgba(16, 185, 129, 0.08);
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.bidder-info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    font-size: 0.9rem;
+}
+
+.bidder-label {
+    color: var(--text-muted);
+}
+
+.bidder-name {
+    font-weight: 700;
+    color: var(--accent-primary);
+}
+
+/* =========================================
+   TIMER
+   ========================================= */
+.timer-container {
+    width: 100px;
+    height: 100px;
+    position: relative;
+    margin: var(--space-md) auto;
+}
+
+.timer-svg {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+}
+
+.timer-bg {
+    fill: none;
+    stroke: var(--bg-card);
+    stroke-width: 6;
+}
+
+.timer-progress {
+    fill: none;
+    stroke: var(--accent-primary);
+    stroke-width: 6;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 0.3s linear, stroke 0.3s ease;
+}
+
+.timer-progress.warning {
+    stroke: var(--accent-warning);
+}
+
+.timer-progress.danger {
+    stroke: var(--accent-danger);
+}
+
+.timer-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2rem;
+    font-weight: 800;
+    font-family: var(--font-mono);
+    color: var(--text-primary);
+}
+
+.timer-text.warning { color: var(--accent-warning); }
+.timer-text.danger { color: var(--accent-danger); animation: timerShake 0.3s ease infinite; }
+
+@keyframes timerShake {
+    0%, 100% { transform: translate(-50%, -50%) rotate(0deg); }
+    25% { transform: translate(-50%, -50%) rotate(-3deg); }
+    75% { transform: translate(-50%, -50%) rotate(3deg); }
+}
+
+/* =========================================
+   AUCTION CONTROLS
+   ========================================= */
+.auction-controls {
+    display: flex;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: var(--space-md) 0;
+}
+
+.auction-controls .btn {
+    min-width: 120px;
+    justify-content: center;
+}
+
+.btn.auto-active {
+    background: linear-gradient(135deg, #fbbf24, #f59e0b) !important;
+    color: #1a1a2e !important;
+    animation: pulseGlow 1.5s ease-in-out infinite;
+}
+
+/* =========================================
+   PROGRESS BAR
+   ========================================= */
+.auction-progress {
+    padding: var(--space-md);
+    background: var(--bg-card);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+}
+
+.progress-stats {
+    display: flex;
+    gap: var(--space-xl);
+    justify-content: center;
+    margin-bottom: var(--space-md);
+}
+
+.progress-stat {
+    text-align: center;
+}
+
+.pstat-value {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: 800;
+    font-family: var(--font-mono);
+}
+
+.pstat-label {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.progress-stat.sold .pstat-value { color: var(--accent-success); }
+.progress-stat.unsold .pstat-value { color: var(--accent-danger); }
+
+.progress-bar-container {
+    height: 6px;
+    background: var(--bg-secondary);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    background: var(--gradient-primary);
+    border-radius: var(--radius-full);
+    transition: width 0.5s ease;
+}
+
+/* =========================================
+   LIVE FEED
+   ========================================= */
+.live-feed {
+    padding: var(--space-lg);
+    max-height: 250px;
+    overflow-y: auto;
+}
+
+.feed-title {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: var(--space-md);
+}
+
+.feed-entries {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+}
+
+.feed-entry {
+    display: flex;
+    gap: var(--space-sm);
+    align-items: flex-start;
+    padding: 6px 10px;
+    border-radius: var(--radius-sm);
+    font-size: 0.8rem;
+    animation: feedSlide 0.3s ease;
+    line-height: 1.4;
+}
+
+@keyframes feedSlide {
+    from { transform: translateX(-20px); opacity: 0; }
+    to   { transform: translateX(0); opacity: 1; }
+}
+
+.feed-entry .feed-time {
+    color: var(--text-muted);
+    font-size: 0.7rem;
+    font-family: var(--font-mono);
+    white-space: nowrap;
+    min-width: 55px;
+}
+
+.feed-entry .feed-msg {
+    color: var(--text-secondary);
+}
+
+.feed-entry.bid { background: rgba(99, 102, 241, 0.05); }
+.feed-entry.bid .feed-msg { color: var(--accent-primary); }
+.feed-entry.sold { background: rgba(16, 185, 129, 0.05); }
+.feed-entry.sold .feed-msg { color: var(--accent-success); font-weight: 600; }
+.feed-entry.unsold { background: rgba(239, 68, 68, 0.05); }
+.feed-entry.unsold .feed-msg { color: var(--accent-danger); }
+.feed-entry.system { background: rgba(6, 182, 212, 0.05); }
+.feed-entry.system .feed-msg { color: var(--accent-info); }
