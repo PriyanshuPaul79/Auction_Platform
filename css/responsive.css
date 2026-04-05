@@ -1,0 +1,162 @@
+/* =========================================
+   RESPONSIVE BREAKPOINTS
+   ========================================= */
+
+@media (max-width: 1024px) {
+    .setup-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+    
+    .export-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .auction-layout {
+        grid-template-columns: 220px 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .main-nav {
+        padding: var(--space-sm) var(--space-md);
+        flex-wrap: wrap;
+        gap: var(--space-sm);
+    }
+
+    .nav-links {
+        order: 3;
+        width: 100%;
+        overflow-x: auto;
+        padding-bottom: var(--space-sm);
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .nav-link .nav-text {
+        display: none;
+    }
+
+    .nav-link {
+        padding: 8px 12px;
+    }
+
+    .setup-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .export-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .auction-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .auction-sidebar {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 280px;
+        height: 100vh;
+        z-index: 200;
+        box-shadow: var(--shadow-lg);
+    }
+
+    .auction-sidebar.open {
+        display: flex;
+    }
+
+    .player-name {
+        font-size: 1.3rem;
+    }
+
+    .price-value.big {
+        font-size: 1.3rem;
+    }
+
+    .sold-text, .unsold-text {
+        font-size: 3rem;
+    }
+
+    .auction-controls {
+        gap: var(--space-xs);
+    }
+
+    .auction-controls .btn {
+        min-width: auto;
+        padding: 8px 14px;
+        font-size: 0.8rem;
+    }
+
+    .squads-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .view {
+        padding: var(--space-md);
+    }
+
+    .view-header h1 {
+        font-size: 1.5rem;
+    }
+
+    .progress-stats {
+        gap: var(--space-md);
+    }
+
+    .pstat-value {
+        font-size: 1.1rem;
+    }
+
+    .player-avatar {
+        width: 90px;
+        height: 90px;
+        font-size: 2.5rem;
+    }
+
+    .price-row {
+        gap: var(--space-md);
+    }
+
+    .timer-container {
+        width: 80px;
+        height: 80px;
+    }
+
+    .timer-text {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .splash-title {
+        font-size: 2rem;
+        letter-spacing: 2px;
+    }
+
+    .splash-subtitle {
+        font-size: 0.85rem;
+    }
+
+    .nav-title {
+        font-size: 0.9rem;
+    }
+
+    .pool-stats {
+        flex-direction: column;
+    }
+
+    .view-actions {
+        flex-wrap: wrap;
+    }
+
+    .modal-content {
+        padding: var(--space-lg);
+    }
+
+    .history-table th,
+    .history-table td {
+        padding: 8px 10px;
+        font-size: 0.75rem;
+    }
+}
