@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Cricket Auction Simulator - Live IPL-style player auction with AI-controlled teams, real-time bidding, and squad management.">
+    <title>Cricket Auction Simulator | Live IPL-Style Player Auction</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/auction.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+    <!-- Splash / Loading Screen -->
+    <div id="splash-screen" class="splash-screen">
+        <div class="splash-content">
+            <div class="splash-logo">
+                <div class="cricket-ball-anim">
+                    <div class="ball-inner"></div>
+                    <div class="ball-seam"></div>
+                </div>
+            </div>
+            <h1 class="splash-title">CRICKET<span class="highlight">AUCTION</span></h1>
+            <p class="splash-subtitle">IPL-Style Player Auction Simulator</p>
+            <div class="splash-loader">
+                <div class="loader-bar"></div>
+            </div>
+            <p class="splash-status" id="splash-status">Initializing...</p>
+        </div>
+    </div>
+
+    <!-- Main App Container -->
+    <div id="app" class="app hidden">
+        <!-- Navigation -->
+        <nav id="main-nav" class="main-nav">
+            <div class="nav-brand">
+                <div class="nav-logo">🏏</div>
+                <span class="nav-title">CRICKET<span class="highlight">AUCTION</span></span>
+            </div>
+            <div class="nav-links">
+                <button class="nav-link active" data-view="setup" id="nav-setup">
+                    <span class="nav-icon">⚙️</span>
+                    <span class="nav-text">Setup</span>
+                </button>
+                <button class="nav-link" data-view="auction" id="nav-auction">
+                    <span class="nav-icon">🔨</span>
+                    <span class="nav-text">Auction</span>
+                </button>
+                <button class="nav-link" data-view="squads" id="nav-squads">
+                    <span class="nav-icon">👥</span>
+                    <span class="nav-text">Squads</span>
+                </button>
+                <button class="nav-link" data-view="history" id="nav-history">
+                    <span class="nav-icon">📜</span>
+                    <span class="nav-text">History</span>
+                </button>
+                <button class="nav-link" data-view="export" id="nav-export">
+                    <span class="nav-icon">📤</span>
+                    <span class="nav-text">Export</span>
+                </button>
+            </div>
+            <div class="nav-actions">
+                <button id="btn-reset-all" class="btn btn-danger btn-sm" title="Reset Everything">
+                    <span>🔄</span> Reset
+                </button>
+            </div>
+        </nav>
+
+        <!-- SETUP VIEW -->
+        <section id="view-setup" class="view active">
+            <div class="view-header">
+                <h1>Auction Setup</h1>
+                <p class="view-desc">Configure your auction parameters before starting</p>
+            </div>
+            <div class="setup-grid">
+                <!-- Your Team Card -->
+                <div class="setup-card glass">
+                    <div class="card-header">
+                        <h2><span class="icon">🏆</span> Your Team</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="admin-team-name">Team Name</label>
+                            <input type="text" id="admin-team-name" class="input" value="Super Kings" placeholder="Enter team name">
+                        </div>
+                        <div class="form-group">
+                            <label for="admin-team-short">Short Code</label>
+                            <input type="text" id="admin-team-short" class="input" value="CSK" maxlength="4" placeholder="e.g. CSK">
+                        </div>
+                        <div class="form-group">
+                            <label for="admin-team-color">Team Color</label>
+                            <input type="color" id="admin-team-color" class="input-color" value="#f9cd05">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Auction Config -->
+                <div class="setup-card glass">
+                    <div class="card-header">
+                        <h2><span class="icon">⚙️</span> Auction Config</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label>AI Teams (Select opponents)</label>
+                            <div id="ai-teams-checkboxes" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 5px; max-height: 150px; overflow-y: auto; padding-right: 5px;">
+                                <!-- populated dynamically -->
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="team-purse">Starting Purse (₹ Cr)</label>
+                            <input type="number" id="team-purse" class="input" value="100" min="50" max="200">
+                        </div>
+                        <div class="form-group">
+                            <label for="squad-size">Squad Size per Team</label>
+                            <input type="number" id="squad-size" class="input" value="11" min="11" max="25">
+                        </div>
+                        <div class="form-group">
+                            <label for="bid-timer">Bid Timer (seconds)</label>
+                            <input type="number" id="bid-timer" class="input" value="10" min="5" max="30">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Role Requirements -->
+                <div class="setup-card glass">
+                    <div class="card-header">
+                        <h2><span class="icon">📋</span> Role Requirements</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="min-bat">Min Batsmen</label>
+                            <input type="number" id="min-bat" class="input" value="3" min="1" max="6">
+                        </div>
+                        <div class="form-group">
+                            <label for="min-bowl">Min Bowlers</label>
+                            <input type="number" id="min-bowl" class="input" value="3" min="1" max="6">
+                        </div>
+                        <div class="form-group">
+                            <label for="min-ar">Min Allrounders</label>
+                            <input type="number" id="min-ar" class="input" value="2" min="1" max="4">
+                        </div>
+                        <div class="form-group">
+                            <label for="min-wk">Min Wicketkeepers</label>
+                            <input type="number" id="min-wk" class="input" value="1" min="1" max="3">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Custom Players -->
+                <div class="setup-card glass full-width">
+                    <div class="card-header">
+                        <h2><span class="icon">✍️</span> Custom Players</h2>
+                        <div class="card-actions">
+                            <button id="btn-add-custom-players" class="btn btn-primary btn-sm">Add Players</button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="custom-players-input">Add your own players to appear first in the auction (Comma separated: Name, Country, Role, Rating, BasePrice)</label>
+                            <textarea id="custom-players-input" class="input" rows="4" placeholder="MS Dhoni, India, wicketkeeper, 95, 2.0&#10;Sachin Tendulkar, India, batsman, 99, 2.0"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Players Pool -->
+                <div class="setup-card glass full-width">
+                    <div class="card-header">
+                        <h2><span class="icon">🏏</span> Player Pool</h2>
+                        <div class="card-actions">
+                            <button id="btn-gen-100" class="btn btn-primary btn-sm">+100</button>
+                            <button id="btn-gen-200" class="btn btn-primary btn-sm">+200</button>
+                            <button id="btn-gen-500" class="btn btn-primary btn-sm">+500</button>
+                            <button id="btn-clear-players" class="btn btn-ghost btn-sm">Clear</button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div id="player-pool-stats" class="pool-stats">
+                            <div class="stat-pill"><span class="stat-label">Total:</span> <span id="pool-total">0</span></div>
+                            <div class="stat-pill bat"><span class="stat-label">Batsmen:</span> <span id="pool-bat">0</span></div>
+                            <div class="stat-pill bowl"><span class="stat-label">Bowlers:</span> <span id="pool-bowl">0</span></div>
+                            <div class="stat-pill ar"><span class="stat-label">Allrounders:</span> <span id="pool-ar">0</span></div>
+                            <div class="stat-pill wk"><span class="stat-label">WK:</span> <span id="pool-wk">0</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="setup-actions">
+                <button id="btn-start-auction" class="btn btn-primary btn-lg pulse-glow" disabled>
+                    <span>🚀</span> Start Auction
+                </button>
+            </div>
+        </section>
+
+        <!-- AUCTION VIEW -->
+        <section id="view-auction" class="view">
+            <div class="auction-layout">
+                <!-- Left: Teams Sidebar -->
+                <aside class="auction-sidebar" id="teams-sidebar">
+                    <h3 class="sidebar-title">Teams</h3>
+                    <div id="teams-list" class="teams-list"></div>
+                    <div class="sidebar-actions">
+                        <button id="btn-add-money" class="btn btn-success btn-sm full-width">💰 Add ₹10 Cr</button>
+                        <button id="btn-reset-purse" class="btn btn-warning btn-sm full-width">🔄 Reset Purse</button>
+                        <button id="btn-unlimited-money" class="btn btn-accent btn-sm full-width">♾️ Unlimited Money</button>
+                    </div>
+                </aside>
+
+                <!-- Center: Auction Stage -->
+                <main class="auction-stage">
+                    <!-- Player Card -->
+                    <div id="player-card-container" class="player-card-container">
+                        <div id="auction-status-banner" class="status-banner">
+                            <span id="auction-status-text">Ready to start</span>
+                        </div>
+                        <div id="current-player-card" class="player-card glass">
+                            <div class="player-card-inner">
+                                <div class="player-avatar" id="player-avatar">
+                                    <div class="avatar-placeholder">🏏</div>
+                                </div>
+                                <div class="player-info">
+                                    <h2 class="player-name" id="player-name">—</h2>
+                                    <div class="player-meta">
+                                        <span class="player-country" id="player-country">—</span>
+                                        <span class="player-role-badge" id="player-role">—</span>
+                                    </div>
+                                    <div class="player-rating" id="player-rating">
+                                        <div class="stars"></div>
+                                        <span class="rating-value">0</span>
+                                    </div>
+                                </div>
+                                <div class="bid-section">
+                                    <div class="price-row">
+                                        <div class="price-item">
+                                            <span class="price-label">Base Price</span>
+                                            <span class="price-value" id="base-price">—</span>
+                                        </div>
+                                        <div class="price-item highlight">
+                                            <span class="price-label">Current Bid</span>
+                                            <span class="price-value big" id="current-bid">—</span>
+                                        </div>
+                                    </div>
+                                    <div class="bidder-info" id="bidder-info">
+                                        <span class="bidder-label">Highest Bidder:</span>
+                                        <span class="bidder-name" id="highest-bidder">—</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Timer -->
+                        <div class="timer-container" id="timer-container">
+                            <svg class="timer-svg" viewBox="0 0 120 120">
+                                <circle class="timer-bg" cx="60" cy="60" r="54"/>
+                                <circle class="timer-progress" id="timer-circle" cx="60" cy="60" r="54" 
+                                    stroke-dasharray="339.292" stroke-dashoffset="0"/>
+                            </svg>
+                            <div class="timer-text" id="timer-text">10</div>
+                        </div>
+                    </div>
+
+                    <!-- Auction Controls -->
+                    <div class="auction-controls" id="auction-controls">
+                        <button id="btn-place-bid" class="btn btn-primary btn-lg">
+                            <span>🔨</span> Place Bid
+                        </button>
+                        <button id="btn-increase-bid" class="btn btn-success btn-lg">
+                            <span>⬆️</span> Raise Bid
+                        </button>
+                        <button id="btn-skip" class="btn btn-warning">
+                            <span>⏭️</span> Skip Player
+                        </button>
+                        <button id="btn-auto-bid" class="btn btn-accent">
+                            <span>🤖</span> Auto On
+                        </button>
+                        <button id="btn-pause" class="btn btn-ghost">
+                            <span>⏸️</span> Pause
+                        </button>
+                        <button id="btn-resume" class="btn btn-ghost hidden">
+                            <span>▶️</span> Resume
+                        </button>
+                        <button id="btn-auto-auction" class="btn btn-danger" title="Instantly finishes remaining players">
+                            <span>⚡</span> Fast Forward All
+                        </button>
+                        <button id="btn-next-player" class="btn btn-primary hidden">
+                            <span>➡️</span> Next Player
+                        </button>
+                    </div>
+
+                    <!-- Auction Progress -->
+                    <div class="auction-progress" id="auction-progress">
+                        <div class="progress-stats">
+                            <div class="progress-stat">
+                                <span class="pstat-value" id="players-remaining">0</span>
+                                <span class="pstat-label">Remaining</span>
+                            </div>
+                            <div class="progress-stat sold">
+                                <span class="pstat-value" id="players-sold">0</span>
+                                <span class="pstat-label">Sold</span>
+                            </div>
+                            <div class="progress-stat unsold">
+                                <span class="pstat-value" id="players-unsold">0</span>
+                                <span class="pstat-label">Unsold</span>
+                            </div>
+                        </div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar" id="auction-progress-bar" style="width: 0%"></div>
+                        </div>
+                    </div>
+
+                    <!-- Live Feed -->
+                    <div class="live-feed glass" id="live-feed">
+                        <h3 class="feed-title">📡 Live Feed</h3>
+                        <div class="feed-entries" id="feed-entries"></div>
+                    </div>
+                </main>
+            </div>
+        </section>
+
+        <!-- SQUADS VIEW -->
+        <section id="view-squads" class="view">
+            <div class="view-header">
+                <h1>Team Squads</h1>
+                <p class="view-desc">View all team rosters and squad compositions</p>
+            </div>
+            <div id="squads-container" class="squads-grid"></div>
+        </section>
+
+        <!-- HISTORY VIEW -->
+        <section id="view-history" class="view">
+            <div class="view-header">
+                <h1>Auction History</h1>
+                <p class="view-desc">Complete bid log and player transaction records</p>
+                <div class="view-actions">
+                    <button class="btn btn-sm filter-btn active" data-filter="all">All</button>
+                    <button class="btn btn-sm filter-btn" data-filter="sold">Sold</button>
+                    <button class="btn btn-sm filter-btn" data-filter="unsold">Unsold</button>
+                </div>
+            </div>
+            <div id="history-container" class="history-table-container">
+                <table class="history-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Player</th>
+                            <th>Role</th>
+                            <th>Base</th>
+                            <th>Sold For</th>
+                            <th>Team</th>
+                            <th>Bids</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="history-tbody"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- EXPORT VIEW -->
+        <section id="view-export" class="view">
+            <div class="view-header">
+                <h1>Export & Tournament</h1>
+                <p class="view-desc">Generate tournament-ready team sheets and export data</p>
+            </div>
+            <div class="export-grid">
+                <div class="export-card glass">
+                    <div class="export-icon">📄</div>
+                    <h3>Export as CSV</h3>
+                    <p>Download all squad data in CSV format</p>
+                    <button id="btn-export-csv" class="btn btn-primary">Download CSV</button>
+                </div>
+                <div class="export-card glass">
+                    <div class="export-icon">📑</div>
+                    <h3>Export as PDF</h3>
+                    <p>Generate printable team sheets in PDF</p>
+                    <button id="btn-export-pdf" class="btn btn-primary">Download PDF</button>
+                </div>
+                <div class="export-card glass">
+                    <div class="export-icon">🏆</div>
+                    <h3>Tournament Sheet</h3>
+                    <p>Create tournament-ready overview</p>
+                    <button id="btn-tournament-sheet" class="btn btn-primary">Generate</button>
+                </div>
+            </div>
+            <div id="tournament-sheet-display" class="tournament-sheet hidden"></div>
+        </section>
+
+        <!-- Notification Toast -->
+        <div id="toast-container" class="toast-container"></div>
+
+        <!-- Sold Overlay -->
+        <div id="sold-overlay" class="sold-overlay hidden">
+            <div class="sold-stamp">
+                <span class="sold-text">SOLD!</span>
+                <span class="sold-details" id="sold-details"></span>
+            </div>
+        </div>
+
+        <!-- Unsold Overlay -->
+        <div id="unsold-overlay" class="unsold-overlay hidden">
+            <div class="unsold-stamp">
+                <span class="unsold-text">UNSOLD</span>
+            </div>
+        </div>
+
+        <!-- Confirm Modal -->
+        <div id="confirm-modal" class="modal hidden">
+            <div class="modal-content glass">
+                <h3 id="modal-title">Confirm</h3>
+                <p id="modal-message">Are you sure?</p>
+                <div class="modal-actions">
+                    <button id="modal-cancel" class="btn btn-ghost">Cancel</button>
+                    <button id="modal-confirm" class="btn btn-primary">Confirm</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Auction Complete Modal -->
+        <div id="auction-complete-modal" class="modal hidden">
+            <div class="modal-content glass large">
+                <div class="confetti-container" id="confetti-container"></div>
+                <h2>🎉 Auction Complete!</h2>
+                <div id="auction-summary" class="auction-summary"></div>
+                <div class="modal-actions">
+                    <button id="btn-view-squads" class="btn btn-primary btn-lg">View Squads</button>
+                    <button id="btn-close-complete" class="btn btn-ghost">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/data/players.js"></script>
+    <script src="js/data/teams.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/auction.js"></script>
+    <script src="js/ai.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/export.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
