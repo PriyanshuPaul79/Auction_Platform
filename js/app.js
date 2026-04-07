@@ -56,12 +56,12 @@
         initFresh();
     });
 
-    function renderAITeamsCheckboxes() {
+    function renderAITeamsCheckboxes(selectAll = false) {
         const container = UI.$('ai-teams-checkboxes');
         if (!container) return;
         container.innerHTML = TeamDB.AI_TEAMS.map((team, idx) => `
             <label style="display: flex; align-items: center; gap: 8px; font-size: 0.9rem;">
-                <input type="checkbox" class="ai-team-cb" value="${team.short}" ${idx < 7 ? 'checked' : ''}>
+                <input type="checkbox" class="ai-team-cb" value="${team.short}" ${selectAll || team.checkedByDefault || idx < 7 ? 'checked' : ''}>
                 <span style="color: ${team.color}; font-weight: 600;">${team.name}</span>
             </label>
         `).join('');
@@ -146,7 +146,6 @@
         $('btn-gen-100')?.addEventListener('click', () => doGeneratePlayers(100));
         $('btn-gen-200')?.addEventListener('click', () => doGeneratePlayers(200));
         $('btn-gen-500')?.addEventListener('click', () => doGeneratePlayers(500));
-
         // Custom Players
         const btnAddCustom = $('btn-add-custom-players');
         if (btnAddCustom) {
@@ -197,6 +196,58 @@
                 } else {
                     UI.toast('Invalid format. Use: Name, Country, Role, Rating, BasePrice', 'error');
                 }
+            });
+        }
+
+        // Custom AI Teams
+        const btnAddCustomTeams = $('btn-add-custom-teams');
+        if (btnAddCustomTeams) {
+            btnAddCustomTeams.addEventListener('click', () => {
+                const text = $('custom-teams-input').value.trim();
+                if (!text) {
+                    UI.toast('Please enter custom teams', 'warning');
+                    return;
+                }
+                
+                const lines = text.split('\n');
+                let added = 0;
+
+                lines.forEach(line => {
+                    const parts = line.split(',').map(s => s.trim());
+                    if (parts.length >= 2) { // At least Name and ShortCode
+                        const name = parts[0];
+                        const short = parts[1];
+                        const color = parts[2] || '#cccccc';
+                        
+                        // Push to TeamDB.AI_TEAMS
+                        TeamDB.AI_TEAMS.push({
+                            name: name,
+                            short: short,
+                            color: color,
+                            accent: color,
+                            checkedByDefault: true
+                        });
+                        added++;
+                    }
+                });
+
+                if (added > 0) {
+                    renderAITeamsCheckboxes();
+                    UI.toast(`✅ Added ${added} custom teams!`, 'success');
+                    $('custom-teams-input').value = '';
+                } else {
+                    UI.toast('Invalid format. Use: Name, ShortCode, HexColor', 'error');
+                }
+            });
+        }
+
+        const btnSelectAllTeams = $('btn-select-all-teams');
+        if (btnSelectAllTeams) {
+            btnSelectAllTeams.addEventListener('click', () => {
+                const checkboxes = document.querySelectorAll('.ai-team-cb');
+                const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+                checkboxes.forEach(cb => cb.checked = !allChecked);
+                btnSelectAllTeams.textContent = allChecked ? 'Select All' : 'Deselect All';
             });
         }
 
