@@ -105,10 +105,18 @@
                     </div>
                     <div class="card-body">
                         <div class="form-group">
-                            <label>AI Teams (Select opponents)</label>
+                            <label style="display: flex; justify-content: space-between; align-items: center;">
+                                <span>AI Teams (Select opponents)</span>
+                                <button id="btn-select-all-teams" class="btn btn-ghost btn-sm" style="padding: 2px 8px; font-size: 0.75rem;">Select All</button>
+                            </label>
                             <div id="ai-teams-checkboxes" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 5px; max-height: 150px; overflow-y: auto; padding-right: 5px;">
                                 <!-- populated dynamically -->
                             </div>
+                        </div>
+                        <div class="form-group" style="margin-top: 15px;">
+                            <label for="custom-teams-input">Add Custom AI Teams (Format: Name, ShortCode, HexColor)</label>
+                            <textarea id="custom-teams-input" class="input" rows="3" placeholder="Kochi Tuskers, KTK, #ff6600&#10;Pune Warriors, PWI, #222222"></textarea>
+                            <button id="btn-add-custom-teams" class="btn btn-primary btn-sm" style="margin-top: 8px;">Add Custom Teams</button>
                         </div>
                         <div class="form-group">
                             <label for="team-purse">Starting Purse (₹ Cr)</label>
